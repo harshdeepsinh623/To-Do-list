@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>To-Do List</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+    <div class="todo-container">
+
+        <h2 class="todo-header">To-Do List</h2>
+        <div class="error-message">Please enter a valid value!</div>
+
+        <div class="form-input">
+            <input type="text" id="todo-input" placeholder="Name...">
+            <button onclick="addTodo()">Add item</button>
+        </div>
+        
+        <ul class="todo-list" id="todo-list"></ul>
+        <button class="clear-button" onclick="clearTodos()">Clear Items</button>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
