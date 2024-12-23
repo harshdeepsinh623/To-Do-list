@@ -9,7 +9,6 @@
 <body>
 
     <div class="todo-container">
-
         <h2 class="todo-header">To-Do List</h2>
         <div class="error-message">Please enter a valid value!</div>
 
@@ -19,6 +18,15 @@
         </div>
         
         <ul class="todo-list" id="todo-list"></ul>
+
+        <div class="filter-options">
+            <select id="filter-dropdown" onchange="filterTodos(this.value)">
+                <option value="all">All</option>
+                <option value="bookmark">Bookmark</option>
+                <option value="not-bookmark">Not Bookmark</option>
+            </select>
+        </div>
+
         <button class="clear-button" onclick="clearTodos()">Clear Items</button>
     </div>
 

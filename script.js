@@ -1,91 +1,91 @@
-const inputElement = document.getElementById('todo-input');
-const todoListElement = document.getElementById('todo-list');
-const errorMessage = document.querySelector('.error-message');
-const todos = JSON.parse(localStorage.getItem('todos')) || [];
+const todoList = document.getElementById('todo-list');
+let todos = JSON.parse(localStorage.getItem('todos')) || []; // Load from localStorage
 
 function addTodo() {
+    const todoInput = document.getElementById('todo-input');
+    const text = todoInput.value.trim();
 
-    const todoText = inputElement.value.trim();
-
-    if (!todoText) {
-        errorMessage.style.display = 'block';
+    if (text === "") {
+        showError("Please enter a valid value!");
         return;
     }
 
-    errorMessage.style.display = 'none';
-      
-    const li = document.createElement('li');
-
-    li.innerHTML = `
-        <span>${todoText}</span>
-        <div class="todo-actions">
-            <button class="complete" onclick="markComplete(this)">&#10004;</button>
-            <button class="edit" onclick="editTodo(this)">&#9998;</button>
-            <button class="delete" onclick="deleteTodo(this)">&#10006;</button>
-        </div>
-    `;
-    todoListElement.append(li);
-    inputElement.value = '';
-
-    todos.push({ text: todoText, completed: false });
-    localStorage.setItem('todos', JSON.stringify(todos));
+    const todo = { text, isBookmarked: false, completed: false };
+    todos.push(todo);
+    saveTodos();
+    todoInput.value = '';
+    renderTodos('all');
 }
 
-function deleteTodo(button) {
+function showError(message) {
+    const errorMessage = document.querySelector('.error-message');
+    errorMessage.textContent = message;
+    errorMessage.style.display = 'block';
 
-    const li = button.closest('li');
-    todoListElement.remove(li);
-
-    const todoIndex = Array.from(todoListElement.children).indexOf(li);
-    todos.splice(todoIndex, 1);
-    localStorage.setItem('todos', JSON.stringify(todos));
+    setTimeout(() => {
+        errorMessage.style.display = 'none';
+    }, 3000);
 }
 
-function editTodo(button) {
+function renderTodos(filter) {
+    todoList.innerHTML = '';
 
-    const li = button.closest('li');
-    const textSpan = li.querySelector('span');
-    const newValue = prompt('Edit your task:', textSpan.textContent);
+    todos
+        .filter(todo => {
+            if (filter === 'bookmark') return todo.isBookmarked;
+            if (filter === 'not-bookmark') return !todo.isBookmarked;
+            return true; // 'all'
+        })
+        .forEach((todo, index) => {
+            const listItem = document.createElement('li');
+            listItem.innerHTML = `
+                <span>${todo.text}</span>
+                <div class="todo-actions">
+                    <button onclick="toggleBookmark(${index})" style="background-color: ${
+                        todo.isBookmarked ? '#ff9800' : '#ccc'
+                    }">${todo.isBookmarked ? '★' : '☆'}</button>
+                    <button onclick="editTodo(${index})">&#9998; Edit</button>
+                    <button onclick="deleteTodo(${index})">&#10006; Delete</button>
+                </div>
+            `;
+            todoList.appendChild(listItem);
+        });
+}
 
-    if (newValue) {
-        textSpan.textContent = newValue;
+function toggleBookmark(index) {
+    todos[index].isBookmarked = !todos[index].isBookmarked;
+    saveTodos();
+    renderTodos(document.getElementById('filter-dropdown').value);
+}
 
-        const todoIndex = Array.from(todoListElement.children).indexOf(li);
-        todos[todoIndex].text = newValue;
-        localStorage.setItem('todos', JSON.stringify(todos));
+function editTodo(index) {
+    const newValue = prompt('Edit your task:', todos[index].text);
+
+    if (newValue && newValue.trim()) {
+        todos[index].text = newValue.trim();
+        saveTodos();
+        renderTodos(document.getElementById('filter-dropdown').value);
     }
 }
 
-function markComplete(button) {
-    const li = button.closest('li');
-    li.classList.toggle('completed');
-
-    const todoIndex = Array.from(todoListElement.children).indexOf(li);
-    todos[todoIndex].completed = li.classList.contains('completed');
-    localStorage.setItem('todos', JSON.stringify(todos));
+function deleteTodo(index) {
+    todos.splice(index, 1);
+    saveTodos();
+    renderTodos('all');
 }
 
 function clearTodos() {
-    todoListElement.innerHTML = '';
-    todos.length = 0; 
+    todos = [];
+    saveTodos();
+    renderTodos('all');
+}
+
+function filterTodos(filter) {
+    renderTodos(filter);
+}
+
+function saveTodos() {
     localStorage.setItem('todos', JSON.stringify(todos));
 }
 
-document.addEventListener('DOMContentLoaded', function() {
-    todos.forEach(todo => {
-        const li = document.createElement('li');
-        li.innerHTML = `
-            <span>${todo.text}</span>
-            <div class="todo-actions">
-                <button class="complete" onclick="markComplete(this)">&#10004;</button>
-                <button class="edit" onclick="editTodo(this)">&#9998;</button>
-                <button class="delete" onclick="deleteTodo(this)">&#10006;</button>
-            </div>
-        `;
-        
-        if (todo.completed) {
-            li.classList.add('completed');
-        }
-        todoListElement.append(li);
-    });
-});
+document.addEventListener('DOMContentLoaded', () => renderTodos('all'));
