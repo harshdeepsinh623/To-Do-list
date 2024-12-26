@@ -1,4 +1,4 @@
-*{
+* {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
@@ -12,7 +12,9 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh;
+    min-height: 100vh;
+    overflow-x: hidden;
+    width: 100%;
 }
 
 .todo-container {
@@ -21,7 +23,7 @@ body {
     padding: 20px;
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
     width: 100%;
-    max-width: 400px;
+    max-width: 700px;
 }
 
 .todo-header {
@@ -41,6 +43,7 @@ body {
 .form-input {
     display: flex;
     gap: 10px;
+    flex-wrap: wrap;
 }
 
 .form-input input {
@@ -48,6 +51,7 @@ body {
     padding: 10px;
     border: 1px solid #ccc;
     border-radius: 5px;
+    min-width: 100px;
 }
 
 .form-input button {
@@ -85,6 +89,28 @@ body {
     background: #d1ffd6;
 }
 
+.todo-text {
+    font-size: 16px;
+    font-weight: bold;
+    color: #2c3e50;
+}
+
+.todo-due-date {
+    font-size: 14px;
+    color: #ff6f61;
+    font-style: italic;
+    margin-left: 10px;
+    padding: 2px 8px;
+    background: rgba(255, 111, 97, 0.1);
+    border-radius: 4px;
+}
+
+.todo-due-date:hover {
+    background: rgba(255, 111, 97, 0.3);
+    text-decoration: underline;
+    cursor: pointer;
+}
+
 .todo-actions button {
     background: none;
     border: none;
@@ -105,19 +131,33 @@ body {
     color: #28a745;
 }
 
-.clear-button {
-    width: 100%;
-    padding: 10px;
-    background: #dc3545;
-    color: #fff;
-    border: none;
-    border-radius: 5px;
-    margin-top: 15px;
-    cursor: pointer;
+.action-dropdown {
+    margin: 10px 0;
+    text-align: center;
 }
 
-.clear-button:hover {
-    background: #c82333;
+.action-dropdown select {
+    width: 200px;
+    padding: 8px 12px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+    background-color: #f9f9f9;
+    color: #333;
+    cursor: pointer;
+    outline: none;
+    transition: all 0.3s ease;
+}
+
+.action-dropdown select:hover {
+    border-color: #ff9800;
+    background-color: #fff;
+}
+
+.action-dropdown select:focus {
+    border-color: #ff9800;
+    box-shadow: 0 0 5px rgba(255, 152, 0, 0.5);
 }
 
 .filter-options {
@@ -130,4 +170,55 @@ body {
     border: 1px solid #ccc;
     border-radius: 4px;
     cursor: pointer;
+}
+
+@media (max-width: 600px) {
+    .todo-container {
+        padding: 15px;
+    }
+
+    .form-input {
+        flex-direction: column;
+        gap: 5px;
+    }
+
+    .form-input input {
+        width: 100%;
+    }
+
+    .form-input button {
+        width: 100%;
+    }
+
+    .todo-list li {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .todo-text {
+        margin-bottom: 10px;
+        font-size: 14px;
+    }
+
+    .todo-due-date {
+        font-size: 12px;
+        margin-bottom: 20px;
+    }
+
+    .todo-actions {
+        display: flex;
+        width: 100%;
+        justify-content: flex-start;
+        gap: 10px;
+    }
+
+    .todo-actions button {
+        font-size: 14px;
+    }
+
+    .action-dropdown select {
+        font-size: 14px;
+        padding: 8px 10px;
+        width: 100%;
+    }
 }

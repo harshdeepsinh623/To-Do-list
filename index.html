@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -13,7 +14,9 @@
         <div class="error-message">Please enter a valid value!</div>
 
         <div class="form-input">
-            <input type="text" id="todo-input" placeholder="Name...">
+            <input type="text" id="todo-input" placeholder="Name..." aria-label="To-Do Item">
+            <input type="date" id="todo-date" placeholder="Date..." aria-label="To-Do Date">
+            <input type="time" id="todo-time" placeholder="Time..." aria-label="To-Do Time">
             <button onclick="addTodo()">Add item</button>
         </div>
         
@@ -24,10 +27,21 @@
                 <option value="all">All</option>
                 <option value="bookmark">Bookmark</option>
                 <option value="not-bookmark">Not Bookmark</option>
+                <option value="today">Today</option>
+                <option value="tomorrow">Tomorrow</option>
+                <option value="this-week">This Week</option>
             </select>
         </div>
 
-        <button class="clear-button" onclick="clearTodos()">Clear Items</button>
+        <div class="action-dropdown">
+            <select id="action-selector" onchange="handleDropdownAction()">
+                <option value="" selected>Select Action</option>
+                <option value="clear">Clear Items</option>
+                <option value="sort">Sort Items</option>
+                <option value="priority">Set Priority</option>
+            </select>
+        </div>
+        
     </div>
 
     <script src="script.js"></script>
